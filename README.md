@@ -443,4 +443,5 @@ AKTUVNET is designed from the ground up for gamers. Whether you're coordinating 
 - **Open Source**: Customize and extend as needed
 - **Cross-Platform**: Works on Windows, macOS, Linux, and web browsers
 
-Join the AKTUVNET community and level up your gaming communication! 🚀🎮
+Join the AKTUVNET community and level up your gaming communication! 🚀🎮#   A K T U V N E T  
+ 
