@@ -30,6 +30,18 @@ function initializeDatabase() {
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         `);
+        
+        // Add new columns if they don't exist (migration)
+        db.run(`ALTER TABLE users ADD COLUMN display_name TEXT`, () => {});
+        db.run(`ALTER TABLE users ADD COLUMN user_tag TEXT UNIQUE`, () => {});
+        db.run(`ALTER TABLE users ADD COLUMN banner TEXT`, () => {});
+        db.run(`ALTER TABLE users ADD COLUMN bio TEXT`, () => {});
+        db.run(`ALTER TABLE users ADD COLUMN profile_music TEXT`, () => {});
+        db.run(`ALTER TABLE users ADD COLUMN custom_status TEXT`, () => {});
+        db.run(`ALTER TABLE users ADD COLUMN status_emoji TEXT`, () => {});
+        db.run(`ALTER TABLE users ADD COLUMN theme TEXT DEFAULT 'dark'`, () => {});
+        db.run(`ALTER TABLE users ADD COLUMN achievements TEXT`, () => {});
+        db.run(`ALTER TABLE users ADD COLUMN profile_views INTEGER DEFAULT 0`, () => {});
 
         // Servers table
         db.run(`

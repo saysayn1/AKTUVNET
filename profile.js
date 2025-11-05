@@ -374,7 +374,7 @@ const themes = {
         '--bg-primary': '#ffffff',
         '--bg-secondary': '#f2f3f5',
         '--bg-tertiary': '#e3e5e8',
-        '--text-primary': '#2e3338',
+        '--text-primary': '#060607',
         '--text-secondary': '#4e5058',
         '--accent': '#5865f2'
     },
