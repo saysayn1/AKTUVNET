@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест звуков AKTUVNET</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #2c2f33;
+            color: white;
+        }
+        h1 {
+            color: #5865f2;
+            text-align: center;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            background: #5865f2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #4752c4;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #40444b;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .success {
+            color: #43b581;
+        }
+        .error {
+            color: #f04747;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔊 Тест звуков AKTUVNET</h1>
+    
+    <div class="button-container">
+        <button onclick="testMessageSound()">🔔 Тест звука сообщения</button>
+        <button onclick="testIncomingCallSound()">📞 Тест звука звонка</button>
+        <button onclick="testCallConnectedSound()">✅ Тест звука подключения</button>
+        <button onclick="testFriendRequestSound()">👥 Тест звука запроса в друзья</button>
+        <button onclick="testCallEndedSound()">❌ Тест звука завершения звонка</button>
+        <button onclick="stopIncomingCall()">⏹️ Остановить звонок</button>
+    </div>
+
+    <div class="status" id="status">
+        Нажмите на кнопку чтобы проверить звук
+    </div>
+
+    <script src="sounds.js"></script>
+    <script>
+        const statusDiv = document.getElementById('status');
+
+        function updateStatus(message, isError = false) {
+            statusDiv.innerHTML = `<span class="${isError ? 'error' : 'success'}">${message}</span>`;
+        }
+
+        function testMessageSound() {
+            try {
+                soundManager.playMessageSound();
+                updateStatus('✅ Звук сообщения воспроизведен!');
+            } catch (e) {
+                updateStatus('❌ Ошибка: ' + e.message, true);
+                console.error(e);
+            }
+        }
+
+        function testIncomingCallSound() {
+            try {
+                soundManager.playIncomingCallSound();
+                updateStatus('✅ Звук входящего звонка воспроизведен! (зацикленный)');
+            } catch (e) {
+                updateStatus('❌ Ошибка: ' + e.message, true);
+                console.error(e);
+            }
+        }
+
+        function testCallConnectedSound() {
+            try {
+                soundManager.playCallConnectedSound();
+                updateStatus('✅ Звук подключения воспроизведен!');
+            } catch (e) {
+                updateStatus('❌ Ошибка: ' + e.message, true);
+                console.error(e);
+            }
+        }
+
+        function testFriendRequestSound() {
+            try {
+                soundManager.playFriendRequestSound();
+                updateStatus('✅ Звук запроса в друзья воспроизведен!');
+            } catch (e) {
+                updateStatus('❌ Ошибка: ' + e.message, true);
+                console.error(e);
+            }
+        }
+
+        function testCallEndedSound() {
+            try {
+                soundManager.playCallEndedSound();
+                updateStatus('✅ Звук завершения звонка воспроизведен!');
+            } catch (e) {
+                updateStatus('❌ Ошибка: ' + e.message, true);
+                console.error(e);
+            }
+        }
+
+        function stopIncomingCall() {
+            try {
+                soundManager.stopIncomingCallSound();
+                updateStatus('⏹️ Звонок остановлен');
+            } catch (e) {
+                updateStatus('❌ Ошибка: ' + e.message, true);
+                console.error(e);
+            }
+        }
+
+        // Проверка загрузки звуков
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loadedSounds = Object.keys(soundManager.sounds).length;
+                updateStatus(`📦 Загружено звуков: ${loadedSounds}/5`);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
