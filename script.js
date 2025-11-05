@@ -52,10 +52,21 @@ function initializeApp() {
     initializeFileUpload();
     initializeEmojiPicker();
     initializeDraggableCallWindow();
+    initializeProfileButton();
     connectToSocketIO();
     requestNotificationPermission();
     loadUserServers();
     showFriendsView();
+}
+
+// Initialize profile button
+function initializeProfileButton() {
+    const userInfoBtn = document.getElementById('userInfoBtn');
+    if (userInfoBtn) {
+        userInfoBtn.addEventListener('click', () => {
+            window.location.href = '/profile.html';
+        });
+    }
 }
 
 function requestNotificationPermission() {
@@ -1629,9 +1640,9 @@ async function toggleVideo() {
         try {
             const videoStream = await navigator.mediaDevices.getUserMedia({
                 video: {
-                    width: { ideal: 1920, max: 1920 },
-                    height: { ideal: 1080, max: 1080 },
-                    frameRate: { ideal: 60, max: 60 },
+                    width: { ideal: 1280, max: 1920 },
+                    height: { ideal: 720, max: 1080 },
+                    frameRate: { ideal: 30, min: 24, max: 60 },
                     facingMode: 'user'
                 }
             });
@@ -1724,8 +1735,9 @@ async function toggleScreenShare() {
             screenStream = await navigator.mediaDevices.getDisplayMedia({
                 video: {
                     cursor: 'always',
-                    width: { ideal: 1920 },
-                    height: { ideal: 1080 }
+                    width: { ideal: 1920, max: 1920 },
+                    height: { ideal: 1080, max: 1080 },
+                    frameRate: { ideal: 30, max: 60 }
                 },
                 audio: {
                     echoCancellation: true,
@@ -1931,13 +1943,26 @@ function createPeerConnection(remoteSocketId, isInitiator) {
         // Add audio tracks first (priority for voice calls)
         audioTracks.forEach(track => {
             console.log(`Adding audio track: ${track.label}, enabled: ${track.enabled}`);
-            pc.addTrack(track, localStream);
+            const sender = pc.addTrack(track, localStream);
+            
+            // Optimize audio bitrate
+            const audioParams = sender.getParameters();
+            if (!audioParams.encodings) audioParams.encodings = [{}];
+            audioParams.encodings[0].maxBitrate = 128000; // 128 kbps for audio
+            sender.setParameters(audioParams);
         });
         
         // Then add video tracks
         videoTracks.forEach(track => {
             console.log(`Adding video track: ${track.label}, enabled: ${track.enabled}`);
-            pc.addTrack(track, localStream);
+            const sender = pc.addTrack(track, localStream);
+            
+            // Optimize video bitrate for 30 FPS
+            const videoParams = sender.getParameters();
+            if (!videoParams.encodings) videoParams.encodings = [{}];
+            videoParams.encodings[0].maxBitrate = 2500000; // 2.5 Mbps for 720p@30fps
+            videoParams.encodings[0].maxFramerate = 30;
+            sender.setParameters(videoParams);
         });
     } else {
         console.error('No local stream available');

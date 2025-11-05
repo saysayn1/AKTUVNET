@@ -12,9 +12,14 @@ function initializeDatabase() {
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT UNIQUE NOT NULL,
+                display_name TEXT,
+                user_tag TEXT UNIQUE,
                 email TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
                 avatar TEXT,
+                banner TEXT,
+                bio TEXT,
+                profile_music TEXT,
                 status TEXT DEFAULT 'Online',
                 game_status TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -191,6 +196,66 @@ const userDB = {
             db.all(sql, [], (err, rows) => {
                 if (err) reject(err);
                 else resolve(rows);
+            });
+        });
+    },
+
+    getById: (id) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM users WHERE id = ?';
+            db.get(sql, [id], (err, row) => {
+                if (err) reject(err);
+                else resolve(row);
+            });
+        });
+    },
+
+    getByUserTag: (userTag) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM users WHERE user_tag = ?';
+            db.get(sql, [userTag], (err, row) => {
+                if (err) reject(err);
+                else resolve(row);
+            });
+        });
+    },
+
+    updateProfile: (id, data) => {
+        return new Promise((resolve, reject) => {
+            const fields = [];
+            const values = [];
+            
+            if (data.bio !== undefined) {
+                fields.push('bio = ?');
+                values.push(data.bio);
+            }
+            if (data.profile_music !== undefined) {
+                fields.push('profile_music = ?');
+                values.push(data.profile_music);
+            }
+            if (data.banner !== undefined) {
+                fields.push('banner = ?');
+                values.push(data.banner);
+            }
+            if (data.display_name !== undefined) {
+                fields.push('display_name = ?');
+                values.push(data.display_name);
+            }
+            if (data.user_tag !== undefined) {
+                fields.push('user_tag = ?');
+                values.push(data.user_tag);
+            }
+            
+            if (fields.length === 0) {
+                return resolve();
+            }
+            
+            values.push(id);
+            const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
+            
+            db.run(sql, values, (err) => {
+                if (err) reject(err);
+                else resolve();
             });
         });
     }

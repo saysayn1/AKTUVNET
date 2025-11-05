@@ -209,6 +209,60 @@ app.get('/api/users', authenticateToken, async (req, res) => {
     }
 });
 
+// Get user by ID
+app.get('/api/users/:id', authenticateToken, async (req, res) => {
+    try {
+        const user = await userDB.getById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        // Don't send password
+        delete user.password;
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to get user' });
+    }
+});
+
+// Update user profile
+app.patch('/api/users/:id/profile', authenticateToken, async (req, res) => {
+    try {
+        if (req.user.id !== parseInt(req.params.id)) {
+            return res.status(403).json({ error: 'Unauthorized' });
+        }
+        
+        const { bio, profile_music, banner, display_name, user_tag } = req.body;
+        
+        // Validate user_tag if provided
+        if (user_tag) {
+            if (user_tag.length < 4) {
+                return res.status(400).json({ error: 'Username must be at least 4 characters' });
+            }
+            if (!/^[a-zA-Z0-9_]+$/.test(user_tag)) {
+                return res.status(400).json({ error: 'Username can only contain letters, numbers, and underscores' });
+            }
+            // Check if user_tag is taken
+            const existing = await userDB.getByUserTag(user_tag);
+            if (existing && existing.id !== req.user.id) {
+                return res.status(400).json({ error: 'Username already taken' });
+            }
+        }
+        
+        await userDB.updateProfile(req.params.id, {
+            bio,
+            profile_music,
+            banner,
+            display_name,
+            user_tag
+        });
+        
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Profile update error:', error);
+        res.status(500).json({ error: 'Failed to update profile' });
+    }
+});
+
 // File upload
 app.post('/api/upload', authenticateToken, upload.single('file'), async (req, res) => {
     try {
