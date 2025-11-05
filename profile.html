@@ -6,6 +6,7 @@
     <title>User Profile - AKTUVNET</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="profile-styles.css">
+    <link rel="stylesheet" href="profile-extra-styles.css">
 </head>
 <body class="profile-page">
     <div class="profile-container">
@@ -44,6 +45,24 @@
                         <span class="user-tag" id="userTag">@username</span>
                     </div>
                     
+                    <!-- Custom Status -->
+                    <div class="custom-status-display" id="customStatusDisplay" style="display: none;">
+                        <span class="status-emoji" id="statusEmojiDisplay">😎</span>
+                        <span class="status-text" id="statusTextDisplay">Chilling</span>
+                    </div>
+                    
+                    <div class="profile-divider"></div>
+                    
+                    <!-- Custom Status Section -->
+                    <div class="profile-section">
+                        <h3>✨ Custom Status</h3>
+                        <div class="status-preview" id="statusPreview">
+                            <span class="preview-emoji" id="previewEmoji">😎</span>
+                            <span class="preview-text" id="previewText">Set your custom status...</span>
+                        </div>
+                        <button class="edit-bio-btn" id="editStatusBtn">Edit Status</button>
+                    </div>
+                    
                     <div class="profile-divider"></div>
                     
                     <!-- Bio Section -->
@@ -77,9 +96,67 @@
                     
                     <div class="profile-divider"></div>
                     
+                    <!-- Theme Selection -->
+                    <div class="profile-section">
+                        <h3>🎨 Theme</h3>
+                        <div class="theme-selector">
+                            <div class="theme-option" data-theme="dark">
+                                <div class="theme-preview dark-theme"></div>
+                                <span>Dark</span>
+                            </div>
+                            <div class="theme-option" data-theme="light">
+                                <div class="theme-preview light-theme"></div>
+                                <span>Light</span>
+                            </div>
+                            <div class="theme-option" data-theme="amoled">
+                                <div class="theme-preview amoled-theme"></div>
+                                <span>AMOLED</span>
+                            </div>
+                            <div class="theme-option" data-theme="purple">
+                                <div class="theme-preview purple-theme"></div>
+                                <span>Purple</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-divider"></div>
+                    
+                    <!-- Achievements -->
+                    <div class="profile-section">
+                        <h3>🏆 Achievements</h3>
+                        <div class="achievements-grid" id="achievementsGrid">
+                            <div class="achievement earned" title="Early Adopter">
+                                <span class="achievement-icon">🌟</span>
+                                <span class="achievement-name">Early Adopter</span>
+                            </div>
+                            <div class="achievement earned" title="First Friend">
+                                <span class="achievement-icon">👥</span>
+                                <span class="achievement-name">First Friend</span>
+                            </div>
+                            <div class="achievement locked" title="100 Messages">
+                                <span class="achievement-icon">💬</span>
+                                <span class="achievement-name">Chatty</span>
+                            </div>
+                            <div class="achievement locked" title="10 Calls">
+                                <span class="achievement-icon">📞</span>
+                                <span class="achievement-name">Caller</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-divider"></div>
+                    
+                    <!-- Profile Views -->
+                    <div class="profile-section">
+                        <h3>👁️ Profile Views</h3>
+                        <p class="profile-views" id="profileViews">0 views</p>
+                    </div>
+                    
+                    <div class="profile-divider"></div>
+                    
                     <!-- Member Since -->
                     <div class="profile-section">
-                        <h3>Member Since</h3>
+                        <h3>📅 Member Since</h3>
                         <p id="memberSince">January 1, 2025</p>
                     </div>
                 </div>
@@ -132,6 +209,38 @@
                         <span class="stat-value" id="callsCount">0</span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Status Modal -->
+    <div id="editStatusModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✨ Set Custom Status</h2>
+                <button class="modal-close" id="closeStatusModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label>Emoji</label>
+                <div class="emoji-selector">
+                    <button class="emoji-btn" data-emoji="😎">😎</button>
+                    <button class="emoji-btn" data-emoji="🎮">🎮</button>
+                    <button class="emoji-btn" data-emoji="🎵">🎵</button>
+                    <button class="emoji-btn" data-emoji="💻">💻</button>
+                    <button class="emoji-btn" data-emoji="🔥">🔥</button>
+                    <button class="emoji-btn" data-emoji="⚡">⚡</button>
+                    <button class="emoji-btn" data-emoji="🌟">🌟</button>
+                    <button class="emoji-btn" data-emoji="💤">💤</button>
+                    <button class="emoji-btn" data-emoji="🎉">🎉</button>
+                    <button class="emoji-btn" data-emoji="🚀">🚀</button>
+                </div>
+                <input type="text" id="statusInput" maxlength="128" placeholder="What's on your mind?" style="margin-top: 12px;">
+                <div class="char-count"><span id="statusCharCount">0</span>/128</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="clearStatus">Clear Status</button>
+                <button class="btn-secondary" id="cancelStatus">Cancel</button>
+                <button class="btn-primary" id="saveStatus">Save</button>
             </div>
         </div>
     </div>

@@ -1,9 +1,26 @@
 // Profile page functionality
 const token = localStorage.getItem('token');
-const userId = localStorage.getItem('userId');
+let userId = localStorage.getItem('userId');
 
-if (!token || !userId) {
+if (!token) {
     window.location.href = '/login.html';
+}
+
+// Get userId from currentUser if not in localStorage
+if (!userId) {
+    const currentUserStr = localStorage.getItem('currentUser');
+    if (currentUserStr) {
+        try {
+            const currentUser = JSON.parse(currentUserStr);
+            userId = currentUser.id;
+            localStorage.setItem('userId', userId);
+        } catch (e) {
+            console.error('Error parsing currentUser:', e);
+            window.location.href = '/login.html';
+        }
+    } else {
+        window.location.href = '/login.html';
+    }
 }
 
 // Load user profile
@@ -15,7 +32,11 @@ async function loadProfile() {
             }
         });
         
-        if (!response.ok) throw new Error('Failed to load profile');
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Profile load error:', response.status, errorText);
+            throw new Error('Failed to load profile');
+        }
         
         const user = await response.json();
         
@@ -56,7 +77,38 @@ async function loadProfile() {
         
     } catch (error) {
         console.error('Error loading profile:', error);
-        alert('Failed to load profile');
+        
+        // Show error in UI instead of alert
+        const profileContainer = document.querySelector('.profile-container');
+        if (profileContainer) {
+            profileContainer.innerHTML = `
+                <div style="text-align: center; padding: 60px 20px; color: #dcddde;">
+                    <h2 style="color: #ed4245; margin-bottom: 20px;">⚠️ Failed to load profile</h2>
+                    <p style="margin-bottom: 20px;">Unable to load your profile data. Please try again.</p>
+                    <button onclick="location.reload()" style="
+                        background: #5865f2;
+                        color: #fff;
+                        border: none;
+                        padding: 12px 24px;
+                        border-radius: 4px;
+                        font-size: 16px;
+                        font-weight: 600;
+                        cursor: pointer;
+                    ">Reload Page</button>
+                    <button onclick="location.href='/index.html'" style="
+                        background: #4f545c;
+                        color: #fff;
+                        border: none;
+                        padding: 12px 24px;
+                        border-radius: 4px;
+                        font-size: 16px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        margin-left: 12px;
+                    ">Go Back</button>
+                </div>
+            `;
+        }
     }
 }
 
@@ -210,6 +262,192 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
         window.location.href = '/login.html';
     }
 });
+
+// Custom Status functionality
+let selectedEmoji = '😎';
+
+document.getElementById('editStatusBtn')?.addEventListener('click', () => {
+    document.getElementById('editStatusModal').classList.remove('hidden');
+});
+
+document.getElementById('closeStatusModal')?.addEventListener('click', () => {
+    document.getElementById('editStatusModal').classList.add('hidden');
+});
+
+document.getElementById('cancelStatus')?.addEventListener('click', () => {
+    document.getElementById('editStatusModal').classList.add('hidden');
+});
+
+// Emoji selection
+document.querySelectorAll('.emoji-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedEmoji = btn.dataset.emoji;
+    });
+});
+
+// Status input character count
+document.getElementById('statusInput')?.addEventListener('input', () => {
+    const input = document.getElementById('statusInput');
+    const count = document.getElementById('statusCharCount');
+    count.textContent = input.value.length;
+});
+
+// Save status
+document.getElementById('saveStatus')?.addEventListener('click', async () => {
+    const statusText = document.getElementById('statusInput').value.trim();
+    
+    try {
+        const response = await fetch(`/api/users/${userId}/profile`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ 
+                custom_status: statusText,
+                status_emoji: selectedEmoji
+            })
+        });
+        
+        if (!response.ok) throw new Error('Failed to update status');
+        
+        // Update UI
+        document.getElementById('previewEmoji').textContent = selectedEmoji;
+        document.getElementById('previewText').textContent = statusText || 'Set your custom status...';
+        
+        if (statusText) {
+            document.getElementById('customStatusDisplay').style.display = 'flex';
+            document.getElementById('statusEmojiDisplay').textContent = selectedEmoji;
+            document.getElementById('statusTextDisplay').textContent = statusText;
+        }
+        
+        document.getElementById('editStatusModal').classList.add('hidden');
+        
+    } catch (error) {
+        console.error('Error updating status:', error);
+        alert('Failed to update status');
+    }
+});
+
+// Clear status
+document.getElementById('clearStatus')?.addEventListener('click', async () => {
+    try {
+        const response = await fetch(`/api/users/${userId}/profile`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ 
+                custom_status: '',
+                status_emoji: ''
+            })
+        });
+        
+        if (!response.ok) throw new Error('Failed to clear status');
+        
+        document.getElementById('customStatusDisplay').style.display = 'none';
+        document.getElementById('previewEmoji').textContent = '😎';
+        document.getElementById('previewText').textContent = 'Set your custom status...';
+        document.getElementById('statusInput').value = '';
+        document.getElementById('editStatusModal').classList.add('hidden');
+        
+    } catch (error) {
+        console.error('Error clearing status:', error);
+        alert('Failed to clear status');
+    }
+});
+
+// Theme switching with animation
+const themes = {
+    dark: {
+        '--bg-primary': '#36393f',
+        '--bg-secondary': '#2f3136',
+        '--bg-tertiary': '#202225',
+        '--text-primary': '#dcddde',
+        '--text-secondary': '#b9bbbe',
+        '--accent': '#5865f2'
+    },
+    light: {
+        '--bg-primary': '#ffffff',
+        '--bg-secondary': '#f2f3f5',
+        '--bg-tertiary': '#e3e5e8',
+        '--text-primary': '#2e3338',
+        '--text-secondary': '#4e5058',
+        '--accent': '#5865f2'
+    },
+    amoled: {
+        '--bg-primary': '#000000',
+        '--bg-secondary': '#0a0a0a',
+        '--bg-tertiary': '#141414',
+        '--text-primary': '#ffffff',
+        '--text-secondary': '#b9bbbe',
+        '--accent': '#5865f2'
+    },
+    purple: {
+        '--bg-primary': '#2b2d42',
+        '--bg-secondary': '#1a1b2e',
+        '--bg-tertiary': '#16213e',
+        '--text-primary': '#edf2f4',
+        '--text-secondary': '#8d99ae',
+        '--accent': '#7289da'
+    }
+};
+
+function applyTheme(themeName) {
+    const theme = themes[themeName];
+    const root = document.documentElement;
+    
+    // Add transition class
+    document.body.classList.add('theme-transition');
+    
+    // Apply theme colors
+    Object.keys(theme).forEach(property => {
+        root.style.setProperty(property, theme[property]);
+    });
+    
+    // Update active theme
+    document.querySelectorAll('.theme-option').forEach(opt => {
+        opt.classList.remove('active');
+    });
+    document.querySelector(`[data-theme="${themeName}"]`)?.classList.add('active');
+    
+    // Remove transition class after animation
+    setTimeout(() => {
+        document.body.classList.remove('theme-transition');
+    }, 300);
+    
+    // Save to localStorage
+    localStorage.setItem('theme', themeName);
+}
+
+// Theme option click handlers
+document.querySelectorAll('.theme-option').forEach(option => {
+    option.addEventListener('click', async () => {
+        const themeName = option.dataset.theme;
+        applyTheme(themeName);
+        
+        // Save to database
+        try {
+            await fetch(`/api/users/${userId}/profile`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ theme: themeName })
+            });
+        } catch (error) {
+            console.error('Error saving theme:', error);
+        }
+    });
+});
+
+// Load saved theme on page load
+const savedTheme = localStorage.getItem('theme') || 'dark';
+applyTheme(savedTheme);
 
 // Load profile on page load
 loadProfile();

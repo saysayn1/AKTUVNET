@@ -41,9 +41,6 @@ class SettingsManager {
         // Close test video
         document.getElementById('closeTestVideo')?.addEventListener('click', () => this.closeTestVideo());
         
-        // Logout button
-        document.getElementById('logoutBtn')?.addEventListener('click', () => this.logout());
-        
         // Device change listeners
         document.getElementById('microphoneSelect')?.addEventListener('change', (e) => {
             this.selectedDevices.microphone = e.target.value;
@@ -78,10 +75,21 @@ class SettingsManager {
     
     async loadDevices() {
         try {
-            // Request permissions first
-            await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+            // Try to get devices without requesting permissions first
+            let devices = await navigator.mediaDevices.enumerateDevices();
             
-            const devices = await navigator.mediaDevices.enumerateDevices();
+            // If devices have no labels, request permissions
+            if (devices.length > 0 && !devices[0].label) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+                    // Stop tracks immediately
+                    stream.getTracks().forEach(track => track.stop());
+                    // Get devices again with labels
+                    devices = await navigator.mediaDevices.enumerateDevices();
+                } catch (permError) {
+                    console.warn('Permission denied, showing devices without labels:', permError);
+                }
+            }
             
             const microphones = devices.filter(d => d.kind === 'audioinput');
             const cameras = devices.filter(d => d.kind === 'videoinput');
@@ -93,7 +101,13 @@ class SettingsManager {
             
         } catch (error) {
             console.error('Error loading devices:', error);
-            alert('Failed to load devices. Please check permissions.');
+            // Show message in UI instead of alert
+            ['microphoneSelect', 'cameraSelect', 'speakerSelect'].forEach(id => {
+                const select = document.getElementById(id);
+                if (select) {
+                    select.innerHTML = '<option>Unable to load devices</option>';
+                }
+            });
         }
     }
     
@@ -210,15 +224,6 @@ class SettingsManager {
         } catch (error) {
             console.error('Speaker test error:', error);
             alert('Failed to test speaker: ' + error.message);
-        }
-    }
-    
-    logout() {
-        if (confirm('Are you sure you want to logout?')) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('userId');
-            localStorage.removeItem('username');
-            window.location.href = '/login.html';
         }
     }
     

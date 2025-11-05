@@ -21,7 +21,12 @@ function initializeDatabase() {
                 bio TEXT,
                 profile_music TEXT,
                 status TEXT DEFAULT 'Online',
+                custom_status TEXT,
+                status_emoji TEXT,
                 game_status TEXT,
+                theme TEXT DEFAULT 'dark',
+                achievements TEXT,
+                profile_views INTEGER DEFAULT 0,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         `);
@@ -244,6 +249,18 @@ const userDB = {
             if (data.user_tag !== undefined) {
                 fields.push('user_tag = ?');
                 values.push(data.user_tag);
+            }
+            if (data.custom_status !== undefined) {
+                fields.push('custom_status = ?');
+                values.push(data.custom_status);
+            }
+            if (data.status_emoji !== undefined) {
+                fields.push('status_emoji = ?');
+                values.push(data.status_emoji);
+            }
+            if (data.theme !== undefined) {
+                fields.push('theme = ?');
+                values.push(data.theme);
             }
             
             if (fields.length === 0) {
