@@ -234,8 +234,61 @@
         </div>
     </div>
 
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal hidden">
+        <div class="modal-content settings-modal">
+            <div class="modal-header">
+                <h2>User Settings</h2>
+                <button class="modal-close" id="closeSettings">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>Voice & Video</h3>
+                    
+                    <div class="setting-item">
+                        <label for="microphoneSelect">Input Device (Microphone)</label>
+                        <select id="microphoneSelect" class="device-select">
+                            <option>Loading devices...</option>
+                        </select>
+                        <button id="testMicrophone" class="test-btn">Test Microphone</button>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="cameraSelect">Video Device (Camera)</label>
+                        <select id="cameraSelect" class="device-select">
+                            <option>Loading devices...</option>
+                        </select>
+                        <button id="testCamera" class="test-btn">Test Camera</button>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="speakerSelect">Output Device (Speaker)</label>
+                        <select id="speakerSelect" class="device-select">
+                            <option>Loading devices...</option>
+                        </select>
+                        <button id="testSpeaker" class="test-btn">Test Speaker</button>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Account</h3>
+                    <div class="setting-item">
+                        <button id="logoutBtn" class="logout-btn">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Video Preview -->
+    <div id="testVideoPreview" class="test-preview hidden">
+        <video id="testVideo" autoplay muted></video>
+        <button id="closeTestVideo" class="close-preview">Close</button>
+    </div>
+
     <script src="sounds.js"></script>
     <script src="voice-recorder.js"></script>
+    <script src="settings.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

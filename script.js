@@ -271,6 +271,66 @@ function connectToSocketIO() {
                 leaveVoiceChannel(true);
             }
         });
+        
+        // Handle participant left (disconnected but not ended)
+        socket.on('call-participant-left', (data) => {
+            console.log('Participant left, waiting 5 minutes...', data);
+            
+            // Show notification
+            const notification = document.createElement('div');
+            notification.className = 'call-notification';
+            notification.textContent = 'Participant disconnected. Call will end in 5 minutes if they don\'t return.';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #faa61a;
+                color: #000;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 10000;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            `;
+            document.body.appendChild(notification);
+            
+            // Remove notification after 10 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 10000);
+            
+            // Store timeout ID in case they reconnect
+            window.callTimeoutId = data.callId;
+        });
+        
+        // Handle call timeout (5 minutes passed)
+        socket.on('call-timeout', (data) => {
+            console.log('Call timeout reached', data);
+            
+            // Show notification
+            const notification = document.createElement('div');
+            notification.className = 'call-notification';
+            notification.textContent = 'Call ended due to inactivity (5 minutes timeout).';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #ed4245;
+                color: #fff;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 10000;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            `;
+            document.body.appendChild(notification);
+            
+            // End call
+            setTimeout(() => {
+                notification.remove();
+                leaveVoiceChannel(true);
+            }, 3000);
+        });
     }
 }
 
