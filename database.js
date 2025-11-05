@@ -32,17 +32,42 @@ function initializeDatabase() {
         `);
         
         // Add new columns if they don't exist (migration)
-        db.run(`ALTER TABLE users ADD COLUMN display_name TEXT`, () => {});
-        db.run(`ALTER TABLE users ADD COLUMN user_tag TEXT UNIQUE`, () => {});
-        db.run(`ALTER TABLE users ADD COLUMN banner TEXT`, () => {});
-        db.run(`ALTER TABLE users ADD COLUMN bio TEXT`, () => {});
-        db.run(`ALTER TABLE users ADD COLUMN profile_music TEXT`, () => {});
-        db.run(`ALTER TABLE users ADD COLUMN custom_status TEXT`, () => {});
-        db.run(`ALTER TABLE users ADD COLUMN status_emoji TEXT`, () => {});
-        db.run(`ALTER TABLE users ADD COLUMN theme TEXT DEFAULT 'dark'`, () => {});
-        db.run(`ALTER TABLE users ADD COLUMN achievements TEXT`, () => {});
-        db.run(`ALTER TABLE users ADD COLUMN profile_views INTEGER DEFAULT 0`, () => {});
-        db.run(`ALTER TABLE users ADD COLUMN owner_badge INTEGER DEFAULT 0`, () => {});
+        // Errors are ignored if column already exists
+        db.run(`ALTER TABLE users ADD COLUMN display_name TEXT`, (err) => {
+            if (err && !err.message.includes('duplicate column')) console.error('Migration error:', err);
+        });
+        db.run(`ALTER TABLE users ADD COLUMN user_tag TEXT`, (err) => {
+            if (err && !err.message.includes('duplicate column')) console.error('Migration error:', err);
+        });
+        db.run(`ALTER TABLE users ADD COLUMN banner TEXT`, (err) => {
+            if (err && !err.message.includes('duplicate column')) console.error('Migration error:', err);
+        });
+        db.run(`ALTER TABLE users ADD COLUMN bio TEXT`, (err) => {
+            if (err && !err.message.includes('duplicate column')) console.error('Migration error:', err);
+        });
+        db.run(`ALTER TABLE users ADD COLUMN profile_music TEXT`, (err) => {
+            if (err && !err.message.includes('duplicate column')) console.error('Migration error:', err);
+        });
+        db.run(`ALTER TABLE users ADD COLUMN custom_status TEXT`, (err) => {
+            if (err && !err.message.includes('duplicate column')) console.error('Migration error:', err);
+        });
+        db.run(`ALTER TABLE users ADD COLUMN status_emoji TEXT`, (err) => {
+            if (err && !err.message.includes('duplicate column')) console.error('Migration error:', err);
+        });
+        db.run(`ALTER TABLE users ADD COLUMN theme TEXT DEFAULT 'dark'`, (err) => {
+            if (err && !err.message.includes('duplicate column')) console.error('Migration error:', err);
+        });
+        db.run(`ALTER TABLE users ADD COLUMN achievements TEXT`, (err) => {
+            if (err && !err.message.includes('duplicate column')) console.error('Migration error:', err);
+        });
+        db.run(`ALTER TABLE users ADD COLUMN profile_views INTEGER DEFAULT 0`, (err) => {
+            if (err && !err.message.includes('duplicate column')) console.error('Migration error:', err);
+        });
+        db.run(`ALTER TABLE users ADD COLUMN owner_badge INTEGER DEFAULT 0`, (err) => {
+            if (err && !err.message.includes('duplicate column')) console.error('Migration error:', err);
+        });
+        
+        console.log('Database migrations completed');
 
         // Servers table
         db.run(`

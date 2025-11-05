@@ -263,7 +263,12 @@ app.patch('/api/users/:id/profile', authenticateToken, async (req, res) => {
         res.json({ success: true });
     } catch (error) {
         console.error('Profile update error:', error);
-        res.status(500).json({ error: 'Failed to update profile' });
+        console.error('Error details:', error.message);
+        console.error('Stack:', error.stack);
+        res.status(500).json({ 
+            error: 'Failed to update profile',
+            details: error.message 
+        });
     }
 });
 
