@@ -282,6 +282,34 @@
         </div>
     </div>
 
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✏️ Edit Profile</h2>
+                <button class="modal-close" id="closeEditProfileModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label>Display Name</label>
+                <input type="text" id="displayNameInput" placeholder="Your display name" maxlength="32">
+                
+                <label style="margin-top: 12px;">Username (@tag)</label>
+                <input type="text" id="userTagInput" placeholder="username" maxlength="32">
+                <div class="char-count">Minimum 4 characters, letters, numbers, and underscores only</div>
+                
+                <label style="margin-top: 12px;">Avatar URL (optional)</label>
+                <input type="url" id="avatarInput" placeholder="https://example.com/avatar.png">
+                
+                <label style="margin-top: 12px;">Banner URL (optional)</label>
+                <input type="url" id="bannerInput" placeholder="https://example.com/banner.png">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelEditProfile">Cancel</button>
+                <button class="btn-primary" id="saveEditProfile">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Support Developer Modal -->
     <div id="supportModal" class="modal hidden">
         <div class="modal-content">

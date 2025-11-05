@@ -231,7 +231,7 @@ app.patch('/api/users/:id/profile', authenticateToken, async (req, res) => {
             return res.status(403).json({ error: 'Unauthorized' });
         }
         
-        const { bio, profile_music, banner, display_name, user_tag, custom_status, status_emoji, theme } = req.body;
+        const { bio, profile_music, banner, display_name, user_tag, custom_status, status_emoji, theme, avatar } = req.body;
         
         // Validate user_tag if provided
         if (user_tag) {
@@ -256,7 +256,8 @@ app.patch('/api/users/:id/profile', authenticateToken, async (req, res) => {
             user_tag,
             custom_status,
             status_emoji,
-            theme
+            theme,
+            avatar
         });
         
         res.json({ success: true });

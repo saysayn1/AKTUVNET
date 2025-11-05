@@ -274,6 +274,10 @@ const userDB = {
                 fields.push('theme = ?');
                 values.push(data.theme);
             }
+            if (data.avatar !== undefined) {
+                fields.push('avatar = ?');
+                values.push(data.avatar);
+            }
             
             if (fields.length === 0) {
                 return resolve();

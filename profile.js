@@ -250,7 +250,82 @@ document.getElementById('settingsBtn').addEventListener('click', () => {
 
 // Edit Profile button
 document.getElementById('editProfileBtn').addEventListener('click', () => {
-    alert('Edit profile feature coming soon!');
+    // Load current values
+    const displayName = document.getElementById('displayName').textContent;
+    const userTag = document.getElementById('userTag').textContent.replace('@', '');
+    
+    document.getElementById('displayNameInput').value = displayName;
+    document.getElementById('userTagInput').value = userTag;
+    
+    document.getElementById('editProfileModal').classList.remove('hidden');
+});
+
+document.getElementById('closeEditProfileModal')?.addEventListener('click', () => {
+    document.getElementById('editProfileModal').classList.add('hidden');
+});
+
+document.getElementById('cancelEditProfile')?.addEventListener('click', () => {
+    document.getElementById('editProfileModal').classList.add('hidden');
+});
+
+// Save profile changes
+document.getElementById('saveEditProfile')?.addEventListener('click', async () => {
+    const displayName = document.getElementById('displayNameInput').value.trim();
+    const userTag = document.getElementById('userTagInput').value.trim();
+    const avatar = document.getElementById('avatarInput').value.trim();
+    const banner = document.getElementById('bannerInput').value.trim();
+    
+    // Validate user_tag
+    if (userTag && userTag.length < 4) {
+        alert('Username must be at least 4 characters');
+        return;
+    }
+    
+    if (userTag && !/^[a-zA-Z0-9_]+$/.test(userTag)) {
+        alert('Username can only contain letters, numbers, and underscores');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/users/${userId}/profile`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                display_name: displayName,
+                user_tag: userTag,
+                avatar: avatar,
+                banner: banner
+            })
+        });
+        
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Failed to update profile');
+        }
+        
+        // Update UI
+        document.getElementById('displayName').textContent = displayName || userTag;
+        document.getElementById('userTag').textContent = `@${userTag}`;
+        document.getElementById('avatarLetter').textContent = (displayName || userTag).charAt(0).toUpperCase();
+        
+        if (banner) {
+            document.getElementById('profileBanner').style.backgroundImage = `url(${banner})`;
+            document.getElementById('profileBanner').style.backgroundSize = 'cover';
+            document.getElementById('profileBanner').style.backgroundPosition = 'center';
+        }
+        
+        document.getElementById('editProfileModal').classList.add('hidden');
+        
+        // Show success message
+        alert('Profile updated successfully!');
+        
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        alert(error.message || 'Failed to update profile');
+    }
 });
 
 // Logout
