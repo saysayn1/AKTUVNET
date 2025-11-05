@@ -75,6 +75,20 @@ async function loadProfile() {
             document.getElementById('profileBanner').style.backgroundPosition = 'center';
         }
         
+        // Owner Badge
+        if (user.owner_badge === 1) {
+            document.getElementById('ownerBadge').style.display = 'block';
+        }
+        
+        // Avatar (if URL provided)
+        if (user.avatar) {
+            const avatarEl = document.getElementById('profileAvatar');
+            avatarEl.style.backgroundImage = `url(${user.avatar})`;
+            avatarEl.style.backgroundSize = 'cover';
+            avatarEl.style.backgroundPosition = 'center';
+            document.getElementById('avatarLetter').style.display = 'none';
+        }
+        
     } catch (error) {
         console.error('Error loading profile:', error);
         
@@ -309,7 +323,17 @@ document.getElementById('saveEditProfile')?.addEventListener('click', async () =
         // Update UI
         document.getElementById('displayName').textContent = displayName || userTag;
         document.getElementById('userTag').textContent = `@${userTag}`;
-        document.getElementById('avatarLetter').textContent = (displayName || userTag).charAt(0).toUpperCase();
+        
+        if (avatar) {
+            const avatarEl = document.getElementById('profileAvatar');
+            avatarEl.style.backgroundImage = `url(${avatar})`;
+            avatarEl.style.backgroundSize = 'cover';
+            avatarEl.style.backgroundPosition = 'center';
+            document.getElementById('avatarLetter').style.display = 'none';
+        } else {
+            document.getElementById('avatarLetter').textContent = (displayName || userTag).charAt(0).toUpperCase();
+            document.getElementById('avatarLetter').style.display = 'block';
+        }
         
         if (banner) {
             document.getElementById('profileBanner').style.backgroundImage = `url(${banner})`;
@@ -325,6 +349,31 @@ document.getElementById('saveEditProfile')?.addEventListener('click', async () =
     } catch (error) {
         console.error('Error updating profile:', error);
         alert(error.message || 'Failed to update profile');
+    }
+});
+
+// Set Owner Badge
+document.getElementById('setOwnerBadgeBtn')?.addEventListener('click', async () => {
+    try {
+        const response = await fetch(`/api/users/${userId}/owner-badge`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (!response.ok) throw new Error('Failed to set badge');
+        
+        // Show badge
+        document.getElementById('ownerBadge').style.display = 'block';
+        document.getElementById('setOwnerBadgeBtn').textContent = '✓ Owner Badge Active';
+        document.getElementById('setOwnerBadgeBtn').disabled = true;
+        
+        alert('Owner badge activated! 🎉');
+        
+    } catch (error) {
+        console.error('Error setting badge:', error);
+        alert('Failed to set owner badge');
     }
 });
 

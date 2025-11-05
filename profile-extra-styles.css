@@ -223,6 +223,14 @@ body.theme-transition * {
     margin: 0;
 }
 
+/* Owner Badge */
+.owner-badge {
+    background: #5865f2 !important;
+    color: #ffffff !important;
+    font-weight: 900;
+    box-shadow: 0 0 10px rgba(88, 101, 242, 0.5);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .theme-selector {

@@ -42,6 +42,7 @@ function initializeDatabase() {
         db.run(`ALTER TABLE users ADD COLUMN theme TEXT DEFAULT 'dark'`, () => {});
         db.run(`ALTER TABLE users ADD COLUMN achievements TEXT`, () => {});
         db.run(`ALTER TABLE users ADD COLUMN profile_views INTEGER DEFAULT 0`, () => {});
+        db.run(`ALTER TABLE users ADD COLUMN owner_badge INTEGER DEFAULT 0`, () => {});
 
         // Servers table
         db.run(`
@@ -277,6 +278,10 @@ const userDB = {
             if (data.avatar !== undefined) {
                 fields.push('avatar = ?');
                 values.push(data.avatar);
+            }
+            if (data.owner_badge !== undefined) {
+                fields.push('owner_badge = ?');
+                values.push(data.owner_badge);
             }
             
             if (fields.length === 0) {

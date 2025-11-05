@@ -257,7 +257,7 @@ function connectToSocketIO() {
         });
 
         socket.on('call-rejected', (data) => {
-            alert('Call was declined');
+            console.log('Call was declined by', data.from);
             // Close call interface
             const callInterface = document.getElementById('callInterface');
             callInterface.classList.add('hidden');
@@ -1395,8 +1395,8 @@ async function joinVoiceChannel(channelName) {
 
     } catch (error) {
         console.error('Error initializing media:', error);
-        alert('Error accessing camera/microphone. Please grant permissions.');
-        leaveVoiceChannel(true); // Force leave
+        console.warn('Camera/microphone access denied. Continuing without media.');
+        // Don't force leave, user can still be in voice channel without media
     }
 }
 

@@ -267,6 +267,26 @@ app.patch('/api/users/:id/profile', authenticateToken, async (req, res) => {
     }
 });
 
+// Set owner badge (admin only)
+app.post('/api/users/:id/owner-badge', authenticateToken, async (req, res) => {
+    try {
+        // Only allow for specific admin user (you can change this logic)
+        // For now, allow user to set their own badge
+        if (req.user.id !== parseInt(req.params.id)) {
+            return res.status(403).json({ error: 'Unauthorized' });
+        }
+        
+        await userDB.updateProfile(req.params.id, {
+            owner_badge: 1
+        });
+        
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Badge update error:', error);
+        res.status(500).json({ error: 'Failed to update badge' });
+    }
+});
+
 // File upload
 app.post('/api/upload', authenticateToken, upload.single('file'), async (req, res) => {
     try {
